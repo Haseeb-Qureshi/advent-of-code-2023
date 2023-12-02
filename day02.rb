@@ -38,3 +38,16 @@ end
 puts total_id_sum
 
 # Part 2
+
+# Power: the multiplied together minimum number of red, blue, green
+power_sum = games.values.sum do |game|
+  max_red, max_blue, max_green = 0, 0, 0
+  game.each do |pull|
+    max_red = [(pull[RED] || 0), max_red].max
+    max_blue = [(pull[BLUE] || 0), max_blue].max
+    max_green = [(pull[GREEN] || 0), max_green].max
+  end
+  max_red * max_blue * max_green
+end
+
+puts power_sum
