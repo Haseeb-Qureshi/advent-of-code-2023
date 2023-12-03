@@ -2,7 +2,7 @@ DATA = File.readlines('data02.txt').map(&:chomp)
 
 games = Hash.new() { |h, k| h[k] = [] }
 DATA.each_with_index do |line, i|
-  # Game 1: 10 red, 7 green, 3 blue; 5 blue, 3 red, 10 green
+  # Parsing - Game 1: 10 red, 7 green, 3 blue; 5 blue, 3 red, 10 green
   game = line.split(': ').last.split(';')
   # [{10 red, 7 green, 3 blue}, {3 red, 10 green}]
   game.map do |pull|
