@@ -38,4 +38,4 @@ def matching_cards(i, winners, mine)
   MEMO[i] = num_cards
 end
 
-puts CARDS.map.with_index { |(w, m), i| matching_cards(i, w, m) }.sum
+puts CARDS.each_with_index.reduce(0) { |sum, ((w, m), i)| sum + matching_cards(i, w, m) }
