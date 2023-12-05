@@ -1,11 +1,12 @@
 class RangeMap < Hash
+  attr_reader :ranges
   def initialize
     super
     @ranges = []
   end
 
   def add_range(destination, source, span)
-    source_range = (source..(source + span - 1))
+    source_range = (source...source + span)
     offset = source - destination
     @ranges << [source_range, offset]
   end
@@ -39,10 +40,23 @@ until input.empty?
   end
 end
 
-lowest_location = seeds.map do |seed|
+def get_location(seed, range_maps)
   range_maps.reduce(seed) { |current, range_map| range_map[current] }
-end.min
+end
 
-puts lowest_location
+puts seeds.map { |seed| get_location(seed, range_maps) }.min
 
 # Part 2
+
+inputs = File.readlines('data05.txt').first.chomp.split[1..-1].map(&:to_i)
+seeds = inputs.each_slice(2).map { |start, span| (start...start + span) }
+
+min = Float::INFINITY
+seeds.each do |range|
+  range.each do |seed|
+    loc = get_location(seed, range_maps)
+    min = loc if loc < min
+  end
+end
+
+puts min
