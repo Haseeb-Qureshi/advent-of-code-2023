@@ -52,6 +52,7 @@ inputs = File.readlines('data05.txt').first.chomp.split[1..-1].map(&:to_i)
 seeds = inputs.each_slice(2).map { |start, span| (start...start + span) }
 
 min = Float::INFINITY
+# Embarrassingly, this takes about ~8 hours, but does run overnight!
 seeds.each do |range|
   range.each do |seed|
     loc = get_location(seed, range_maps)
