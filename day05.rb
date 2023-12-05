@@ -40,11 +40,9 @@ until input.empty?
 end
 
 lowest_location = seeds.map do |seed|
-  current = seed
-  range_maps.each do |range_map|
-    current = range_map[current]
-  end
-  current
+  range_maps.reduce(seed) { |current, range_map| range_map[current] }
 end.min
 
 puts lowest_location
+
+# Part 2
