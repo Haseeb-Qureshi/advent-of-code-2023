@@ -19,6 +19,10 @@ puts winning_strats.reduce(:*)
 
 # Part 2
 
-time, distance = File.readlines('data06.txt').map { |l| l.split[1..-1].join }.map(&:to_i)
+t, d = File.readlines('data06.txt').map { |l| l.split[1..-1].join }.map(&:to_i)
 
-puts time, distance
+# Use the quadratic equation!
+higher = ((-t - Math.sqrt(t ** 2 - (4 * d))) / -2).ceil
+lower = ((-t + Math.sqrt(t ** 2 - (4 * d))) / -2).ceil
+
+puts higher - lower
