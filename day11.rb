@@ -1,46 +1,15 @@
-raw_grid = File.readlines('data11.txt').map(&:chomp).map(&:chars)
-
-# raw_grid = '...#......
-# .......#..
-# #.........
-# ..........
-# ......#...
-# .#........
-# .........#
-# ..........
-# .......#..
-# #...#.....'.lines.map(&:chomp).map(&:chars)
+grid = File.readlines('data11.txt').map(&:chomp).map(&:chars)
 
 cols = Hash.new(false)
 rows = Hash.new(false)
 
-raw_grid.each_index do |i| # each row
-  rows[i] = raw_grid[i].all? { |c| c == '.' }
+grid.each_index do |i| # each row
+  rows[i] = grid[i].all? { |c| c == '.' }
 end
-raw_grid[0].each_index do |j| # each column
-  cols[j] = raw_grid.all? { |row| row[j] == '.' }
-end
-
-grid = []
-new_length = cols.length + cols.values.count(&:itself)
-
-raw_grid.each_with_index do |row, i|
-  if row.all? { |c| c == '.' }
-    2.times { grid << ['.'] * new_length }
-  else
-    new_line = []
-    row.each_with_index do |c, j|
-      if cols[j]
-        2.times { new_line << '.' }
-      else
-        new_line << c
-      end
-    end
-    grid << new_line
-  end
+grid[0].each_index do |j| # each column
+  cols[j] = grid.all? { |row| row[j] == '.' }
 end
 
-# shortest distances between galaxies
 galaxies = []
 grid.each_index do |i|
   grid[i].each_index do |j|
@@ -48,10 +17,20 @@ grid.each_index do |i|
   end
 end
 
-def dist(a, b)
+def dist(a, b, cols, rows, modifier: 2)
   i1, j1 = a
   i2, j2 = b
-  (i1 - i2).abs + (j1 - j2).abs
+  i1, i2 = [i1, i2].sort
+  j1, j2 = [j1, j2].sort
+  i_modifier = (i1..i2).count { |i| rows[i] } * (modifier - 1)
+  j_modifier = (j1..j2).count { |j| cols[j] } * (modifier - 1)
+  i2 - i1 + i_modifier + j2 - j1 + j_modifier
 end
 
-puts galaxies.combination(2).to_a.sum { |a, b| dist(a, b) }
+# Part 1
+
+puts galaxies.combination(2).to_a.sum { |a, b| dist(a, b, cols, rows) }
+
+# Part 2
+
+puts galaxies.combination(2).to_a.sum { |a, b| dist(a, b, cols, rows, modifier: 1_000_000) }
